@@ -134,7 +134,7 @@ function criarProduto(produto){
           titulo.textContent = produto.title;
     
           const preco = document.createElement('p');
-          preco.textContent = `Preço: €${parseFloat(produto.price)}`;
+          preco.textContent = `Preço: €${parseFloat(produto.price).toFixed(2)}`;
 
           // Botão de adicionar ao carrinho
           const botaoAdicionar = document.createElement('button');
@@ -160,7 +160,7 @@ function criarProduto(produto){
           titulo.textContent = produto.title;
     
           const preco = document.createElement('p');
-          preco.textContent = `Preço: €${parseFloat(produto.price)}`;
+          preco.textContent = `Preço: €${parseFloat(produto.price).toFixed(2)}`;
           //preco.textContent = `Preço: €${produto.price.toFixed(2)}`;
           // Botão de adicionar ao carrinho
           const botaoAdicionar = document.createElement('button');
