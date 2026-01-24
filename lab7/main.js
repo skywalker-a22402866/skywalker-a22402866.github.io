@@ -58,7 +58,7 @@ select.addEventListener('change',function(){
       .then(categorias => {
         categorias.forEach(cat => {
           const option = document.createElement('option');
-          option.textContent = cat;
+          option.textContent = cat.name;
           select.appendChild(option);
         });
       })
@@ -116,14 +116,14 @@ function atualizarCarrinho(produtos){
 }
 
 function criarProduto(produto){
-        if (categorias_selected!="" && produto.category==categorias_selected){      
+        if (categorias_selected!="" && produto.category == categorias_selected){      
           const artigo = document.createElement('article')
           //artigo.textContent = produto.title;
 
           //artigo.textContent= produto.category
 
           const imagem = document.createElement('img');
-          imagem.src = produto.image;     // a imagem do produto
+          imagem.src = `https://deisishop.pythonanywhere.com${produto.image}`;     // a imagem do produto
           imagem.alt = produto.title;     // texto alternativo
           imagem.style.width = "150px";   // opcional: define tamanho
     
@@ -132,7 +132,8 @@ function criarProduto(produto){
           titulo.textContent = produto.title;
     
           const preco = document.createElement('p');
-          preco.textContent = `Preço: €${produto.price.toFixed(2)}`;
+          preco.textContent = `Preço: €${produto.price}`;
+
           // Botão de adicionar ao carrinho
           const botaoAdicionar = document.createElement('button');
           botaoAdicionar.textContent = '+ Adicionar ao carrinho';
@@ -148,7 +149,7 @@ function criarProduto(produto){
           //artigo.textContent= produto.category
 
           const imagem = document.createElement('img');
-          imagem.src = produto.image;     // a imagem do produto
+          imagem.src = `https://deisishop.pythonanywhere.com${produto.image}`;     // a imagem do produto
           imagem.alt = produto.title;     // texto alternativo
           imagem.style.width = "150px";   // opcional: define tamanho
     
@@ -157,7 +158,8 @@ function criarProduto(produto){
           titulo.textContent = produto.title;
     
           const preco = document.createElement('p');
-          preco.textContent = `Preço: €${produto.price.toFixed(2)}`;
+          preco.textContent = `Preço: €${produto.price}`;
+          //preco.textContent = `Preço: €${produto.price.toFixed(2)}`;
           // Botão de adicionar ao carrinho
           const botaoAdicionar = document.createElement('button');
           botaoAdicionar.textContent = '+ Adicionar ao carrinho';
