@@ -89,10 +89,11 @@ function atualizarCarrinho(produtos){
     
     carrinho.forEach((produto,index) => {
         
-        total += produto.price; // soma o preço de cada produto
+        total += parseFloat(produto.price); // soma o preço de cada produto
         const li = document.createElement('li')
         const imagem = document.createElement('img');
-        imagem.src = produto.image;     // busca a imagem do produto
+        imagem.src = `https://deisishop.pythonanywhere.com${produto.image}`;     // a imagem do produto
+        //imagem.src = produto.image;     // busca a imagem do produto
         imagem.alt = produto.title;     // texto alternativo
         imagem.style.width = "150px";   // opcional: define tamanho
         
@@ -100,7 +101,8 @@ function atualizarCarrinho(produtos){
         titulo.textContent = produto.title;
         
         const preco = document.createElement('p');
-        preco.textContent = `Preço: €${produto.price.toFixed(2)}`;
+        preco.textContent = `Preço: €${parseFloat(produto.price).toFixed(2)}`;
+        //preco.textContent = `Preço: €${produto.price.toFixed(2)}`;
         // Botão de remover do carrinho
         const botaoRemover = document.createElement('button');
         
