@@ -3,8 +3,10 @@ const section = document.querySelector('#produtos');
 const basket = document.querySelector('#carrinho');
 const totalCarrinho = document.getElementById('total');
 const select = document.getElementById('select-categoria');
+const order = document.getElementById('order');
 
-let categorias_selected="Todas as categorias";
+let categorias_selected = "Todas as categorias";
+let ordem_selecionada = "Preço ascendente";
 
 document.addEventListener('DOMContentLoaded', function() {
   fetch('https://deisishop.pythonanywhere.com/products/')
@@ -19,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         carregarCategorias();
         carregarProdutos(produtos);
         atualizarCarrinho(produtos);
+        carregarOrdenacao() ;
       })
       .catch(error => {
         console.error('Erro:', error);
@@ -43,10 +46,42 @@ select.addEventListener('change',function(){
       });
 })
 
+order.addEventListener('change',function(){
+    ordem_selecionada = select.value;
+    fetch('https://deisishop.pythonanywhere.com/products/')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erro ao buscar produtos: ' + response.status);
+      }
+      return response.json();
+    })
+    .then(produtos => {
+      // converter price para número
+      produtos.forEach(produto => {
+        produto.price = Number(produto.price);
+      });
+
+      // ordenar
+      if (ordem_selecionada === 'Preço ascendente') {
+        produtos.sort((a, b) => a.price - b.price);
+      }
+
+      if (ordem_selecionada === 'Preço descendente') {
+        produtos.sort((a, b) => b.price - a.price);
+      }
+
+      carregarProdutos(produtos);
+    })
+      .catch(error => {
+        console.error('Erro:', error);
+      });
+
+});
 
 
 
-    function carregarCategorias() {
+
+function carregarCategorias() {
     const option = document.createElement('option');
           option.textContent = "Todas as categorias";
           select.appendChild(option);    
@@ -64,8 +99,16 @@ select.addEventListener('change',function(){
       })
       .catch(err => console.error(err));
   }
-   // atualizarCarrinho(produtos);
-//})
+   // atualizarCarrinho(produtos);//})
+
+function carregarOrdenacao() {
+   const  option1 = document.createElement('option');
+          option1.textContent = "Preço ascendente"
+          order.appendChild(option1);
+   const  option2 = document.createElement('option');
+          option2.textContent = "Preço descendente"
+          order.appendChild(option2);       
+}
 
 function carregarProdutos(produtos){
     while (section.firstChild) {
