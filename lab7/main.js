@@ -6,7 +6,7 @@ const select = document.getElementById('select-categoria');
 const order = document.getElementById('order');
 
 let categorias_selected = "Todas as categorias";
-let ordem_selecionada = "Preço ascendente";
+let ordem_selecionada = "ascendente";
 
 document.addEventListener('DOMContentLoaded', function() {
   fetch('https://deisishop.pythonanywhere.com/products/')
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(produtos => {
         console.log('Produtos recebidos:', produtos);
         carregarCategorias();
+        produtos.sort((a, b) => a.price - b.price);
         carregarProdutos(produtos);
         atualizarCarrinho(produtos);
         carregarOrdenacao() ;
@@ -47,7 +48,8 @@ select.addEventListener('change',function(){
 })
 
 order.addEventListener('change',function(){
-    ordem_selecionada = select.value;
+    ordem_selecionada = order.value;
+    console.log('Ordem',ordem_selecionada);
     fetch('https://deisishop.pythonanywhere.com/products/')
     .then(response => {
       if (!response.ok) {
@@ -58,19 +60,22 @@ order.addEventListener('change',function(){
     .then(produtos => {
       // converter price para número
       produtos.forEach(produto => {
-        produto.price = Number(produto.price);
+        produto.price = parseFloat(produto.price);
       });
 
       // ordenar
-      if (ordem_selecionada === 'Preço ascendente') {
+      if (ordem_selecionada === 'ascendente') {
         produtos.sort((a, b) => a.price - b.price);
+        console.log('Ordem',produtos)
       }
 
-      if (ordem_selecionada === 'Preço descendente') {
+      if (ordem_selecionada === 'descendente') {
         produtos.sort((a, b) => b.price - a.price);
+        console.log('Ordem',produtos)
       }
 
       carregarProdutos(produtos);
+      
     })
       .catch(error => {
         console.error('Erro:', error);
@@ -103,10 +108,10 @@ function carregarCategorias() {
 
 function carregarOrdenacao() {
    const  option1 = document.createElement('option');
-          option1.textContent = "Preço ascendente"
+          option1.textContent = "ascendente"
           order.appendChild(option1);
    const  option2 = document.createElement('option');
-          option2.textContent = "Preço descendente"
+          option2.textContent = "descendente"
           order.appendChild(option2);       
 }
 
