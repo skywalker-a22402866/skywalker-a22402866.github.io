@@ -5,6 +5,10 @@ const totalCarrinho = document.getElementById('total');
 const select = document.getElementById('select-categoria');
 const order = document.getElementById('order');
 const procurar = document.getElementById('procurar');
+const comprar = document.getElementById('btnComprar')
+const student = document.getElementById('studentCheckbox');
+const coupon = document.getElementById('couponInput');
+const name = document.getElementById('nameInput')
 
 let categorias_selected = "Todas as categorias";
 let ordem_selecionada = "ascendente";
@@ -107,6 +111,57 @@ order.addEventListener('change',function(){
 
 });
 
+comprar.addEventListener('click',function(){
+  let isStudent = student.value
+  let coupao = coupon.value
+  let nome = "teste"
+
+  fetch('https://deisishop.pythonanywhere.com/buy', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      products: carrinho,
+      student: isStudent,
+      coupon: coupao,
+      name: nome
+    })
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erro ao processar a compra');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Resposta do buy:', data);
+    mostrarResultado(data);
+  })
+  .catch(error => {
+    alert('Erro na compra');
+    console.error(error);
+  });
+});
+
+function mostrarResultado(data) {
+  const div = document.getElementById('resultadoCompra');
+
+  let html = `
+    <h3>Compra concluída ✅</h3>
+    <p><strong>Referência de pagamento:</strong> ${data.reference}</p>
+    <p><strong>Total:</strong> €${data.total.toFixed(2)}</p>
+  `;
+
+  if (data.total_with_discount && data.total_with_discount < data.total) {
+    html += `
+      <p><strong>Total com desconto:</strong>
+      €${data.total_with_discount.toFixed(2)}</p>
+    `;
+  }
+
+  div.innerHTML = html;
+}
 
 
 
