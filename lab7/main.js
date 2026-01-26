@@ -4,9 +4,11 @@ const basket = document.querySelector('#carrinho');
 const totalCarrinho = document.getElementById('total');
 const select = document.getElementById('select-categoria');
 const order = document.getElementById('order');
+const procurar = document.getElementById('procurar');
 
 let categorias_selected = "Todas as categorias";
 let ordem_selecionada = "ascendente";
+let search_selected = "";
 
 document.addEventListener('DOMContentLoaded', function() {
   fetch('https://deisishop.pythonanywhere.com/products/')
@@ -28,6 +30,28 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Erro:', error);
       });
 });
+
+procurar.addEventListener('input',function(){
+      search_selected = procurar.value;
+      fetch('https://deisishop.pythonanywhere.com/products/')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro ao buscar produtos: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(produtos => {
+        console.log('Produtos recebidos:', produtos);
+        const produtosFiltrados = produtos.filter(produto =>
+        produto.title?.includes(search_selected)
+      );
+       carregarProdutos(produtosFiltrados);
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+      });
+
+})
 
 select.addEventListener('change',function(){
     categorias_selected = select.value;
@@ -119,6 +143,7 @@ function carregarProdutos(produtos){
     while (section.firstChild) {
         section.removeChild(section.firstChild);
         }
+
     produtos.forEach(produto => {
         //console.log(produto);
     
