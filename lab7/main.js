@@ -13,6 +13,7 @@ const name = document.getElementById('nameInput')
 let categorias_selected = "Todas as categorias";
 let ordem_selecionada = "ascendente";
 let search_selected = "";
+let carrinho = [];
 
 document.addEventListener('DOMContentLoaded', function() {
   fetch('https://deisishop.pythonanywhere.com/products/')
@@ -112,9 +113,9 @@ order.addEventListener('change',function(){
 });
 
 comprar.addEventListener('click',function(){
-  let isStudent = student.value
-  let coupao = coupon.value
-  let nome = "teste"
+  const isStudent = document.getElementById('studentCheckbox').checked;
+  const coupao = document.getElementById('couponInput').value.trim();
+  const nome = "teste";
 
   fetch('https://deisishop.pythonanywhere.com/buy', {
     method: 'POST',
@@ -127,6 +128,7 @@ comprar.addEventListener('click',function(){
       coupon: coupao,
       name: nome
     })
+    
   })
   .then(response => {
     if (!response.ok) {
@@ -304,7 +306,7 @@ function criarProduto(produto){
 // Função para adicionar produto ao carrinho
 function adicionarAoCarrinho(produto) {
     // 1. Pega o carrinho existente
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     
     // 2. Adiciona o novo produto
     carrinho.push(produto);
@@ -315,7 +317,7 @@ function adicionarAoCarrinho(produto) {
 }
 
 function removerCarrinho(index){
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     carrinho.splice(index, 1); // Remove o item pelo índice
     localStorage.setItem('carrinho', JSON.stringify(carrinho));
     atualizarCarrinho();
